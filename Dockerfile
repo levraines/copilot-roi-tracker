@@ -29,9 +29,8 @@ WORKDIR /app
 COPY server/package*.json ./
 RUN npm ci --omit=dev
 
-# Copy compiled server
+# Copy compiled server (rootDir=".." produces dist/server/src and dist/shared)
 COPY --from=server-build /app/server/dist ./dist
-COPY --from=server-build /app/shared ../shared
 
 # Copy built React SPA into public/
 COPY --from=client-build /app/client/dist ./public
@@ -51,4 +50,4 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD wget -qO- http://localhost:8080/api/health || exit 1
 
-CMD ["node", "dist/src/index.js"]
+CMD ["node", "dist/server/src/index.js"]

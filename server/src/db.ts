@@ -3,8 +3,14 @@ import path from "path";
 
 // In Azure App Service, use /home/data for persistent storage
 // In Docker, use the DB_DIR env variable
-// In dev, use the local data/ folder
-const DB_DIR = process.env.DB_DIR || path.join(__dirname, "..", "data");
+// In dev (tsx), __dirname = server/src → go up one level to server/data
+// In prod build, __dirname = dist/server/src → go up 3 levels + server/data
+const isCompiledBuild = __dirname.includes("dist");
+const DB_DIR =
+  process.env.DB_DIR ||
+  (isCompiledBuild
+    ? path.join(__dirname, "..", "..", "..", "server", "data")
+    : path.join(__dirname, "..", "data"));
 const DB_PATH = path.join(DB_DIR, "roi-tracker.db");
 
 let db: Database.Database;
