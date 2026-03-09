@@ -1,0 +1,20 @@
+{
+  "name": "copilot-agent-roi-tracker",
+  "version": "1.0.0",
+  "description": "Track time & cost savings from Copilot Studio, M365, and Azure AI Foundry agents",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "dev:client": "cd client && npm run dev",
+    "dev:server": "cd server && npm run dev",
+    "build": "cd client && npm run build && cd ../server && npm run build",
+    "start": "cd server && npm start",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+    "docker:build": "docker build -t copilot-roi-tracker .",
+    "docker:run": "docker run -p 8080:8080 -e NODE_ENV=production copilot-roi-tracker",
+    "azure:deploy": "bash infra/scripts/deploy.sh"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

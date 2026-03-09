@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Power Platform Solution manifest
+  This allows the ROI Tracker to be imported as a managed solution
+  into a Power Platform environment, appearing alongside Copilot Studio.
+-->
+<ImportExportXml version="9.2.24053.147" SolutionPackageVersion="9.2" languagecode="1033"
+  generatedBy="CopilotAgentROITracker" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SolutionManifest>
+    <UniqueName>CopilotAgentROITracker</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="Copilot Agent ROI Tracker" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Track time and cost savings from Copilot Studio, M365 Copilot, and Azure AI Foundry agents. Provides executive dashboards with ROI metrics." languagecode="1033" />
+    </Descriptions>
+    <Version>1.0.0.0</Version>
+    <Managed>2</Managed>
+    <Publisher>
+      <UniqueName>CopilotROIPublisher</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="Copilot ROI Tracker Publisher" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions>
+        <Description description="Publisher for the Copilot Agent ROI Tracker solution" languagecode="1033" />
+      </Descriptions>
+      <EMailAddress>admin@yourorg.com</EMailAddress>
+      <SupportingWebsiteUrl>https://github.com/your-org/copilot-roi-tracker</SupportingWebsiteUrl>
+      <CustomizationPrefix>croitrk</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>88600</CustomizationOptionValuePrefix>
+    </Publisher>
+    <RootComponents>
+      <!-- Canvas App (Model-driven app pointing to the hosted dashboard) -->
+      <RootComponent type="80" id="{00000000-0000-0000-0000-000000000001}" behavior="0" />
+      <!-- Environment Variable: Dashboard URL -->
+      <RootComponent type="380" id="{00000000-0000-0000-0000-000000000010}" behavior="0" />
+      <!-- Environment Variable: Tenant ID -->
+      <RootComponent type="380" id="{00000000-0000-0000-0000-000000000011}" behavior="0" />
+      <!-- Environment Variable: Client ID -->
+      <RootComponent type="380" id="{00000000-0000-0000-0000-000000000012}" behavior="0" />
+      <!-- Connection Reference: Copilot Studio -->
+      <RootComponent type="10066" id="{00000000-0000-0000-0000-000000000020}" behavior="0" />
+    </RootComponents>
+    <MissingDependencies />
+  </SolutionManifest>
+</ImportExportXml>

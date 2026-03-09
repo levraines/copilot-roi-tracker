@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "name": "Copilot ROI Tracker — Track Usage Event",
+    "description": "Power Automate flow that can be called from Copilot Studio topics to automatically record agent usage in the ROI Tracker."
+  },
+  "parameters": {
+    "dashboardUrl": {
+      "type": "String",
+      "defaultValue": "@{variables('croitrk_DashboardUrl')}"
+    }
+  },
+  "triggers": {
+    "When_triggered": {
+      "type": "Request",
+      "kind": "Http",
+      "inputs": {
+        "schema": {
+          "type": "object",
+          "properties": {
+            "agentId": { "type": "string", "description": "The ROI Tracker agent ID" },
+            "actionBenchmarkId": { "type": "string", "description": "The benchmark action ID" },
+            "userId": { "type": "string", "description": "The user's Object ID or email" },
+            "userName": { "type": "string", "description": "The user's display name" },
+            "notes": { "type": "string", "description": "Optional notes about this usage" }
+          },
+          "required": ["agentId", "actionBenchmarkId", "userId", "userName"]
+        }
+      }
+    }
+  },
+  "actions": {
+    "Record_Usage": {
+      "type": "Http",
+      "inputs": {
+        "method": "POST",
+        "uri": "@{parameters('dashboardUrl')}/api/usage",
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "agentId": "@{triggerBody()['agentId']}",
+          "actionBenchmarkId": "@{triggerBody()['actionBenchmarkId']}",
+          "userId": "@{triggerBody()['userId']}",
+          "userName": "@{triggerBody()['userName']}",
+          "notes": "@{triggerBody()?['notes']}"
+        }
+      },
+      "runAfter": {}
+    },
+    "Response": {
+      "type": "Response",
+      "inputs": {
+        "statusCode": 200,
+        "body": {
+          "status": "recorded",
+          "usageId": "@{body('Record_Usage')['id']}"
+        }
+      },
+      "runAfter": {
+        "Record_Usage": ["Succeeded"]
+      }
+    }
+  }
+}

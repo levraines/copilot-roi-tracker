@@ -1,0 +1,75 @@
+{
+  "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "name": "Copilot ROI Tracker — Daily Agent Sync",
+    "description": "Power Automate flow that runs daily to scan all connected environments and sync agent data to the ROI Tracker dashboard."
+  },
+  "parameters": {
+    "dashboardUrl": {
+      "type": "String",
+      "defaultValue": "@{variables('croitrk_DashboardUrl')}",
+      "metadata": { "description": "ROI Tracker API base URL" }
+    }
+  },
+  "triggers": {
+    "Recurrence": {
+      "type": "Recurrence",
+      "recurrence": {
+        "frequency": "Day",
+        "interval": 1,
+        "schedule": {
+          "hours": ["6"],
+          "minutes": ["0"]
+        },
+        "timeZone": "UTC"
+      }
+    }
+  },
+  "actions": {
+    "Get_Environments": {
+      "type": "Http",
+      "inputs": {
+        "method": "GET",
+        "uri": "@{parameters('dashboardUrl')}/api/environments"
+      },
+      "runAfter": {}
+    },
+    "For_Each_Environment": {
+      "type": "Foreach",
+      "foreach": "@body('Get_Environments')",
+      "actions": {
+        "Scan_Environment": {
+          "type": "Http",
+          "inputs": {
+            "method": "POST",
+            "uri": "@{parameters('dashboardUrl')}/api/environments/@{items('For_Each_Environment')['id']}/scan"
+          }
+        }
+      },
+      "runAfter": {
+        "Get_Environments": ["Succeeded"]
+      }
+    },
+    "Send_Summary_Email": {
+      "type": "ApiConnection",
+      "inputs": {
+        "host": {
+          "connection": {
+            "name": "@parameters('$connections')['office365']['connectionId']"
+          }
+        },
+        "method": "post",
+        "path": "/v2/Mail",
+        "body": {
+          "To": "@{variables('adminEmail')}",
+          "Subject": "Copilot ROI Tracker — Daily Sync Complete",
+          "Body": "<p>The daily agent sync has completed successfully.</p><p>Check the dashboard: @{parameters('dashboardUrl')}</p>"
+        }
+      },
+      "runAfter": {
+        "For_Each_Environment": ["Succeeded"]
+      }
+    }
+  }
+}

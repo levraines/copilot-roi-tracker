@@ -1,0 +1,233 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Copilot Agent ROI Tracker",
+    "description": "Custom connector for the Copilot Agent ROI Tracker. Enables Power Platform flows to query agent data, record usage events, and view dashboard metrics.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "ROI Tracker Support",
+      "url": "https://github.com/your-org/copilot-roi-tracker"
+    }
+  },
+  "host": "your-app.azurewebsites.net",
+  "basePath": "/api",
+  "schemes": ["https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "securityDefinitions": {
+    "oauth2_auth": {
+      "type": "oauth2",
+      "flow": "accessCode",
+      "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+      "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+      "scopes": {}
+    }
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "HealthCheck",
+        "summary": "Health Check",
+        "description": "Check if the ROI Tracker API is running",
+        "responses": {
+          "200": {
+            "description": "API is healthy",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": { "type": "string" },
+                "version": { "type": "string" },
+                "timestamp": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dashboard": {
+      "get": {
+        "operationId": "GetDashboard",
+        "summary": "Get Dashboard Data",
+        "description": "Retrieve KPIs, agent summaries, time series, and ROI metrics",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "type": "string",
+            "description": "Start date (ISO 8601)",
+            "required": false
+          },
+          {
+            "name": "to",
+            "in": "query",
+            "type": "string",
+            "description": "End date (ISO 8601)",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dashboard data",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "kpis": { "type": "object" },
+                "agentSummaries": { "type": "array", "items": { "type": "object" } },
+                "timeSeries": { "type": "array", "items": { "type": "object" } },
+                "usageBySource": { "type": "array", "items": { "type": "object" } },
+                "topActions": { "type": "array", "items": { "type": "object" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/agents": {
+      "get": {
+        "operationId": "ListAgents",
+        "summary": "List All Agents",
+        "description": "Get all registered agents",
+        "responses": {
+          "200": {
+            "description": "List of agents",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "name": { "type": "string" },
+                  "source": { "type": "string" },
+                  "agentType": { "type": "string" },
+                  "enabled": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usage": {
+      "post": {
+        "operationId": "RecordUsage",
+        "summary": "Record Agent Usage",
+        "description": "Record a single agent usage event for ROI tracking",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": ["agentId", "actionBenchmarkId", "userId", "userName"],
+              "properties": {
+                "agentId": { "type": "string", "description": "Agent ID" },
+                "actionBenchmarkId": { "type": "string", "description": "Benchmark action ID" },
+                "userId": { "type": "string", "description": "User ID or email" },
+                "userName": { "type": "string", "description": "User display name" },
+                "notes": { "type": "string", "description": "Optional notes" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Usage recorded",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "agentId": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usage/bulk": {
+      "post": {
+        "operationId": "BulkRecordUsage",
+        "summary": "Bulk Record Usage",
+        "description": "Record multiple usage events at once",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "agentId": { "type": "string" },
+                  "actionBenchmarkId": { "type": "string" },
+                  "userId": { "type": "string" },
+                  "userName": { "type": "string" }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Usage events recorded"
+          }
+        }
+      }
+    },
+    "/environments": {
+      "get": {
+        "operationId": "ListEnvironments",
+        "summary": "List Connected Environments",
+        "description": "Get all registered Microsoft environments",
+        "responses": {
+          "200": {
+            "description": "List of environments",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "platform": { "type": "string" },
+                  "name": { "type": "string" },
+                  "status": { "type": "string" },
+                  "agentsFound": { "type": "integer" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/environments/{id}/scan": {
+      "post": {
+        "operationId": "ScanEnvironment",
+        "summary": "Scan Environment for Agents",
+        "description": "Trigger a scan of a connected environment to discover agents",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Environment ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Scan results",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "agentsFound": { "type": "integer" },
+                "agentsCreated": { "type": "integer" },
+                "agentsUpdated": { "type": "integer" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+node_modules/
+dist/
+server/data/
+*.db
+*.db-wal
+*.db-shm
+.env
+.env.local
+.env.production
+.DS_Store
+
+# Azure
+.azure/
+*.tfstate
+*.tfstate.backup

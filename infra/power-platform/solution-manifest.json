@@ -1,0 +1,70 @@
+{
+  "schemaVersion": "1.0.0",
+  "name": "CopilotAgentROITracker",
+  "displayName": "Copilot Agent ROI Tracker",
+  "description": "Track time and cost savings from Copilot Studio, M365 Copilot, and Azure AI Foundry agents with an executive dashboard.",
+  "version": "1.0.0",
+  "publisher": {
+    "name": "CopilotROIPublisher",
+    "displayName": "Copilot ROI Tracker Publisher"
+  },
+  "environmentVariables": [
+    {
+      "schemaName": "croitrk_DashboardUrl",
+      "displayName": "ROI Tracker Dashboard URL",
+      "description": "The URL of the deployed Azure App Service (e.g., https://copilotroi-app-xxxx.azurewebsites.net)",
+      "type": "String",
+      "isRequired": true,
+      "defaultValue": ""
+    },
+    {
+      "schemaName": "croitrk_TenantId",
+      "displayName": "Azure AD Tenant ID",
+      "description": "The Tenant ID of the customer's Azure AD / Microsoft Entra ID",
+      "type": "String",
+      "isRequired": true,
+      "defaultValue": ""
+    },
+    {
+      "schemaName": "croitrk_ClientId",
+      "displayName": "App Registration Client ID",
+      "description": "The Client ID of the Azure AD app registration used for API access",
+      "type": "String",
+      "isRequired": true,
+      "defaultValue": ""
+    }
+  ],
+  "connectionReferences": [
+    {
+      "schemaName": "croitrk_CopilotStudioConnection",
+      "displayName": "Copilot Studio Connection",
+      "connectorId": "/providers/Microsoft.PowerApps/apis/shared_powerplatformforadmins",
+      "description": "Connection to Power Platform Admin API for scanning Copilot Studio agents"
+    },
+    {
+      "schemaName": "croitrk_GraphConnection",
+      "displayName": "Microsoft Graph Connection",
+      "connectorId": "/providers/Microsoft.PowerApps/apis/shared_microsoftgraphsecurity",
+      "description": "Connection to Microsoft Graph API for M365 Copilot agents"
+    }
+  ],
+  "flows": [
+    {
+      "name": "SyncAgentsDaily",
+      "displayName": "Sync Agents from Environments (Daily)",
+      "description": "Runs daily to scan all connected environments and sync agent inventory",
+      "trigger": "recurrence",
+      "recurrence": {
+        "frequency": "Day",
+        "interval": 1,
+        "startTime": "2026-01-01T06:00:00Z"
+      }
+    },
+    {
+      "name": "TrackUsageEvent",
+      "displayName": "Track Agent Usage Event",
+      "description": "Triggered when an agent is used — records the event in the ROI Tracker",
+      "trigger": "automated"
+    }
+  ]
+}

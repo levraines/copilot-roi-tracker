@@ -1,0 +1,120 @@
+# ============================================================
+# GitHub Actions — Build, Test & Deploy to Azure
+# Triggers on push to main branch
+# ============================================================
+name: Build & Deploy to Azure
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+
+env:
+  APP_NAME: copilotroi
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  # ---- Build & Test ----
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: |
+            client/package-lock.json
+            server/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd client && npm ci
+          cd ../server && npm ci
+
+      - name: Build client
+        run: cd client && npm run build
+
+      - name: Build server
+        run: cd server && npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: |
+            client/dist/
+            server/dist/
+            server/package*.json
+            shared/
+
+  # ---- Build Docker Image & Push to ACR ----
+  docker:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Login to ACR
+        run: az acr login --name ${{ secrets.ACR_NAME }}
+
+      - name: Build & push Docker image
+        run: |
+          IMAGE="${{ secrets.ACR_LOGIN_SERVER }}/${{ env.APP_NAME }}:${{ github.sha }}"
+          IMAGE_LATEST="${{ secrets.ACR_LOGIN_SERVER }}/${{ env.APP_NAME }}:latest"
+          docker build -t "$IMAGE" -t "$IMAGE_LATEST" .
+          docker push "$IMAGE"
+          docker push "$IMAGE_LATEST"
+
+  # ---- Deploy to Azure App Service ----
+  deploy:
+    runs-on: ubuntu-latest
+    needs: docker
+    environment: production
+    steps:
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy to App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          images: '${{ secrets.ACR_LOGIN_SERVER }}/${{ env.APP_NAME }}:${{ github.sha }}'
+
+      - name: Health check
+        run: |
+          echo "Waiting for deployment..."
+          sleep 30
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://${{ secrets.AZURE_WEBAPP_NAME }}.azurewebsites.net/api/health")
+          if [ "$STATUS" != "200" ]; then
+            echo "❌ Health check failed (status: $STATUS)"
+            exit 1
+          fi
+          echo "✅ App is healthy"
