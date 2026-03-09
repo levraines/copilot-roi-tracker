@@ -2,7 +2,7 @@
 
 > Track time and cost savings from **Copilot Studio**, **M365 Copilot**, and **Azure AI Foundry** agents with an executive-ready dashboard.
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fyour-org%2Fcopilot-roi-tracker%2Fmain%2Finfra%2Fazuredeploy.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Flevraines%2Fcopilot-roi-tracker%2Fmain%2Finfra%2Fazuredeploy.json)
 
 ---
 
@@ -47,7 +47,7 @@
 
 ```bash
 # 1. Clone & install
-git clone https://github.com/your-org/copilot-roi-tracker.git
+git clone https://github.com/levraines/copilot-roi-tracker.git
 cd copilot-roi-tracker
 npm run install:all
 

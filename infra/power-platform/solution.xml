@@ -25,7 +25,7 @@
         <Description description="Publisher for the Copilot Agent ROI Tracker solution" languagecode="1033" />
       </Descriptions>
       <EMailAddress>admin@yourorg.com</EMailAddress>
-      <SupportingWebsiteUrl>https://github.com/your-org/copilot-roi-tracker</SupportingWebsiteUrl>
+      <SupportingWebsiteUrl>https://github.com/levraines/copilot-roi-tracker</SupportingWebsiteUrl>
       <CustomizationPrefix>croitrk</CustomizationPrefix>
       <CustomizationOptionValuePrefix>88600</CustomizationOptionValuePrefix>
     </Publisher>

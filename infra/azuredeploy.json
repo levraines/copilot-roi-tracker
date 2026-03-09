@@ -31,7 +31,7 @@
     },
     "containerImage": {
       "type": "string",
-      "defaultValue": "ghcr.io/your-org/copilot-roi-tracker:latest",
+      "defaultValue": "ghcr.io/levraines/copilot-roi-tracker:latest",
       "metadata": {
         "description": "Docker container image to deploy"
       }

@@ -6,7 +6,7 @@
     "version": "1.0.0",
     "contact": {
       "name": "ROI Tracker Support",
-      "url": "https://github.com/your-org/copilot-roi-tracker"
+      "url": "https://github.com/levraines/copilot-roi-tracker"
     }
   },
   "host": "your-app.azurewebsites.net",
