@@ -57,6 +57,20 @@ export function seedDemoData() {
       source: "azure-foundry",
       agentType: "custom",
     },
+    {
+      id: uuid(),
+      name: "Fabric Conversational Agent",
+      description: "Hosted conversational agent using Fabric runtimes",
+      source: "azure-fabric",
+      agentType: "custom",
+    },
+    {
+      id: uuid(),
+      name: "Azure Cognitive Agent",
+      description: "Agent using Cognitive Services and Azure Functions",
+      source: "azure",
+      agentType: "custom",
+    },
   ];
 
   const insertAgent = db.prepare(

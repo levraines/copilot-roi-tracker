@@ -216,6 +216,8 @@ async function callMicrosoftApi(env: any): Promise<DiscoveredAgent[]> {
     scope = "https://api.powerplatform.com/.default";
   } else if (env.platform === "azure-foundry") {
     scope = "https://management.azure.com/.default";
+  } else if (env.platform === "azure-fabric" || env.platform === "azure") {
+    scope = "https://management.azure.com/.default";
   }
 
   const tokenBody = new URLSearchParams({
@@ -247,6 +249,12 @@ async function callMicrosoftApi(env: any): Promise<DiscoveredAgent[]> {
     apiUrl = "https://graph.microsoft.com/beta/copilot/agents";
   } else if (env.platform === "azure-foundry") {
     apiUrl = `https://management.azure.com/${env.environmentId}/providers/Microsoft.MachineLearningServices/endpoints?api-version=2024-04-01`;
+  } else if (env.platform === "azure-fabric") {
+    // Fabric exposes resources under Microsoft.Fabric namespaces — placeholder URI
+    apiUrl = `https://management.azure.com/${env.environmentId}/providers/Microsoft.Fabric/deployments?api-version=2025-01-01-preview`;
+  } else if (env.platform === "azure") {
+    // Generic Azure resource listing; use resource graph or resource provider listing
+    apiUrl = `https://management.azure.com/${env.environmentId}/resources?api-version=2024-01-01`;
   }
 
   const apiRes = await fetch(apiUrl, {
@@ -310,6 +318,19 @@ function simulateDiscovery(platform: AgentPlatform, envId: string): DiscoveredAg
     return [
       { name: "Report Builder", description: "Generates weekly/monthly reports from data sources with charts and insights", externalId: `af-${prefix}-ep-001`, agentType: "custom" },
       { name: "Data Analysis Copilot", description: "Analyzes datasets, generates insights, and creates visualizations on demand", externalId: `af-${prefix}-ep-002`, agentType: "orchestrated" },
+    ];
+  }
+
+  if (platform === "azure-fabric") {
+    return [
+      { name: "Fabric Conversational Agent", description: "Hosted conversational agent using Fabric runtimes", externalId: `fbr-${prefix}-dep-001`, agentType: "custom" },
+      { name: "Fabric Orchestrator", description: "Orchestrates multiple micro-agents across Fabric clusters", externalId: `fbr-${prefix}-dep-002`, agentType: "orchestrated" },
+    ];
+  }
+
+  if (platform === "azure") {
+    return [
+      { name: "Azure Cognitive Agent", description: "Agent using Cognitive Services and Azure Functions", externalId: `az-${prefix}-res-001`, agentType: "custom" },
     ];
   }
 

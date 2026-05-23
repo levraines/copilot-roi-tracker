@@ -151,7 +151,9 @@ function SourceBadge({ source }: { source: string }) {
   const map: Record<string, { label: string; cls: string }> = {
     "copilot-studio": { label: "Copilot Studio", cls: "badge-blue" },
     "m365-copilot": { label: "M365 Copilot", cls: "badge-green" },
-    "azure-foundry": { label: "Azure AI Foundry", cls: "badge-purple" },
+  "azure-foundry": { label: "Azure AI Foundry", cls: "badge-purple" },
+  "azure-fabric": { label: "Azure Fabric", cls: "badge-orange" },
+  "azure": { label: "Azure", cls: "badge-cyan" },
   };
   const info = map[source] || { label: source, cls: "badge" };
   return <span className={info.cls}>{info.label}</span>;

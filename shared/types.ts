@@ -8,7 +8,9 @@
 export type AgentPlatform =
   | "copilot-studio"   // Microsoft Copilot Studio (Power Platform)
   | "m365-copilot"     // Microsoft 365 Copilot
-  | "azure-foundry";   // Azure AI Foundry
+  | "azure-foundry"    // Azure AI Foundry
+  | "azure-fabric"     // Azure Fabric (agents deployed via Fabric)
+  | "azure";           // Generic Azure platform (catch-all for other Azure agent sources)
 
 /** The type of agent within its platform */
 export type AgentType =

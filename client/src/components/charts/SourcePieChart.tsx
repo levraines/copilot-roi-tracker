@@ -16,12 +16,16 @@ const COLORS: Record<string, string> = {
   "copilot-studio": "#3b82f6",
   "m365-copilot": "#10b981",
   "azure-foundry": "#8b5cf6",
+  "azure-fabric": "#f97316",
+  "azure": "#06b6d4",
 };
 
 const LABELS: Record<string, string> = {
   "copilot-studio": "Copilot Studio",
   "m365-copilot": "M365 Copilot",
   "azure-foundry": "Azure AI Foundry",
+  "azure-fabric": "Azure Fabric",
+  "azure": "Azure (other)",
 };
 
 export function SourcePieChart({ data }: Props) {
