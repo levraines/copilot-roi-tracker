@@ -13,11 +13,11 @@ interface Props {
 }
 
 const COLORS: Record<string, string> = {
-  "copilot-studio": "#3b82f6",
-  "m365-copilot": "#10b981",
-  "azure-foundry": "#8b5cf6",
-  "azure-fabric": "#f97316",
-  "azure": "#06b6d4",
+  "copilot-studio": "#475569",
+  "m365-copilot": "#334155",
+  "azure-foundry": "#5b21b6",
+  "azure-fabric": "#7c2d12",
+  "azure": "#0f4c5c",
 };
 
 const LABELS: Record<string, string> = {
@@ -57,7 +57,7 @@ export function SourcePieChart({ data }: Props) {
           ))}
         </Pie>
         <Tooltip
-          contentStyle={{ borderRadius: "12px", border: "1px solid #e5e7eb" }}
+          contentStyle={{ borderRadius: "12px", border: "1px solid #0f1724", background: '#071018', color: '#e6eef8' }}
           formatter={(value: number) => [`$${value.toLocaleString()}`, "Savings"]}
         />
         <Legend verticalAlign="bottom" height={36} />

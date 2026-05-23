@@ -30,20 +30,20 @@ export function TimeSavingsChart({ data }: Props) {
       <AreaChart data={formatted} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
         <defs>
           <linearGradient id="colorHours" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.15} />
-            <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+              <stop offset="5%" stopColor="#475569" stopOpacity={0.28} />
+              <stop offset="95%" stopColor="#475569" stopOpacity={0} />
           </linearGradient>
           <linearGradient id="colorMoney" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#10b981" stopOpacity={0.15} />
-            <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+            <stop offset="5%" stopColor="#334155" stopOpacity={0.22} />
+            <stop offset="95%" stopColor="#334155" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-        <XAxis dataKey="date" tick={{ fontSize: 12 }} stroke="#9ca3af" />
-        <YAxis yAxisId="hours" tick={{ fontSize: 12 }} stroke="#9ca3af" />
-        <YAxis yAxisId="money" orientation="right" tick={{ fontSize: 12 }} stroke="#9ca3af" />
+  <CartesianGrid strokeDasharray="3 3" stroke="#111827" />
+  <XAxis dataKey="date" tick={{ fontSize: 12 }} stroke="#9ca3af" />
+  <YAxis yAxisId="hours" tick={{ fontSize: 12 }} stroke="#9ca3af" />
+  <YAxis yAxisId="money" orientation="right" tick={{ fontSize: 12 }} stroke="#9ca3af" />
         <Tooltip
-          contentStyle={{ borderRadius: "12px", border: "1px solid #e5e7eb" }}
+          contentStyle={{ borderRadius: "12px", border: "1px solid #111827", background: '#0b1220', color: '#e6eef8' }}
           formatter={(value: number, name: string) => {
             if (name === "Hours Saved") return [`${value}h`, name];
             return [`$${value.toLocaleString()}`, name];
@@ -55,7 +55,7 @@ export function TimeSavingsChart({ data }: Props) {
           type="monotone"
           dataKey="hours"
           name="Hours Saved"
-          stroke="#3b82f6"
+          stroke="#94a3b8"
           fill="url(#colorHours)"
           strokeWidth={2}
         />
@@ -64,7 +64,7 @@ export function TimeSavingsChart({ data }: Props) {
           type="monotone"
           dataKey="moneySaved"
           name="Cost Savings ($)"
-          stroke="#10b981"
+          stroke="#64748b"
           fill="url(#colorMoney)"
           strokeWidth={2}
         />

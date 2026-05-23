@@ -4,13 +4,13 @@
 
 @layer base {
   body {
-    @apply bg-gray-50 font-sans;
+    @apply bg-black text-gray-200 font-sans;
   }
 }
 
 @layer components {
   .card {
-    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-6;
+  @apply bg-gray-900 rounded-2xl shadow-sm border border-gray-800 p-6;
   }
   .card-hover {
     @apply card transition-shadow hover:shadow-md;
@@ -19,10 +19,10 @@
     @apply card flex flex-col gap-1;
   }
   .btn-primary {
-    @apply bg-brand-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-brand-700 transition-colors;
+    @apply bg-gray-700 text-gray-100 px-4 py-2 rounded-lg font-medium hover:bg-gray-600 transition-colors;
   }
   .btn-secondary {
-    @apply bg-white text-gray-700 px-4 py-2 rounded-lg font-medium border border-gray-200 hover:bg-gray-50 transition-colors;
+    @apply bg-gray-800 text-gray-200 px-4 py-2 rounded-lg font-medium border border-gray-700 hover:bg-gray-700 transition-colors;
   }
   .input-field {
     @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent;
@@ -31,15 +31,21 @@
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
   }
   .badge-blue {
-    @apply badge bg-blue-100 text-blue-800;
+    @apply badge bg-slate-800 text-slate-200;
   }
   .badge-green {
-    @apply badge bg-green-100 text-green-800;
+    @apply badge bg-slate-800 text-slate-200;
   }
   .badge-purple {
-    @apply badge bg-purple-100 text-purple-800;
+    @apply badge bg-slate-800 text-slate-200;
   }
   .badge-amber {
-    @apply badge bg-amber-100 text-amber-800;
+    @apply badge bg-slate-800 text-slate-200;
+  }
+  .badge-orange {
+    @apply badge bg-slate-800 text-slate-200;
+  }
+  .badge-cyan {
+    @apply badge bg-slate-800 text-slate-200;
   }
 }

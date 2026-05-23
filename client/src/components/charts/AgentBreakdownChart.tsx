@@ -31,11 +31,11 @@ export function AgentBreakdownChart({ data }: Props) {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart data={formatted} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+        <CartesianGrid strokeDasharray="3 3" stroke="#0f1724" />
         <XAxis dataKey="name" tick={{ fontSize: 11 }} stroke="#9ca3af" angle={-15} textAnchor="end" height={60} />
         <YAxis tick={{ fontSize: 12 }} stroke="#9ca3af" />
         <Tooltip
-          contentStyle={{ borderRadius: "12px", border: "1px solid #e5e7eb" }}
+          contentStyle={{ borderRadius: "12px", border: "1px solid #0f1724", background: '#071018', color: '#e6eef8' }}
           formatter={(value: number, name: string) => {
             if (name === "Hours Saved") return [`${value}h`, name];
             if (name === "Cost Savings") return [`$${value.toLocaleString()}`, name];
@@ -43,8 +43,8 @@ export function AgentBreakdownChart({ data }: Props) {
           }}
         />
         <Legend />
-        <Bar dataKey="hoursSaved" name="Hours Saved" fill="#3b82f6" radius={[4, 4, 0, 0]} />
-        <Bar dataKey="moneySaved" name="Cost Savings" fill="#10b981" radius={[4, 4, 0, 0]} />
+  <Bar dataKey="hoursSaved" name="Hours Saved" fill="#475569" radius={[4, 4, 0, 0]} />
+  <Bar dataKey="moneySaved" name="Cost Savings" fill="#334155" radius={[4, 4, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
   );
